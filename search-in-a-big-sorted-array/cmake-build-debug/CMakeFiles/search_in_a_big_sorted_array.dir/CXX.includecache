@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/lu.gao/Desktop/learning-algo-week-3-binary-search/search-in-a-big-sorted-array/Solution.h
+cmath
+-
+iostream
+-
+
+C:/Users/lu.gao/Desktop/learning-algo-week-3-binary-search/search-in-a-big-sorted-array/main.cpp
+iostream
+-
+Solution.h
+C:/Users/lu.gao/Desktop/learning-algo-week-3-binary-search/search-in-a-big-sorted-array/Solution.h
+

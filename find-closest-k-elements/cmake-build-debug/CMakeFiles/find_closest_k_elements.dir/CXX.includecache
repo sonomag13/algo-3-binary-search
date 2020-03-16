@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/lu.gao/Desktop/learning-algo-week-3-binary-search/find-closest-k-elements/Solution.h
+vector
+-
+cmath
+-
+iostream
+-
+
+C:/Users/lu.gao/Desktop/learning-algo-week-3-binary-search/find-closest-k-elements/main.cpp
+iostream
+-
+vector
+-
+Solution.h
+C:/Users/lu.gao/Desktop/learning-algo-week-3-binary-search/find-closest-k-elements/Solution.h
+
