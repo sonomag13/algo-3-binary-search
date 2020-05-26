@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/mountain_peak.dir/main.cpp.o  -o mountain_peak 

@@ -1,3 +1,0 @@
-/home/lu.gao/Desktop/learning-algo-week-3-binary-search/last-target-position/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/lu.gao/Desktop/learning-algo-week-3-binary-search/last-target-position/cmake-build-debug/CMakeFiles/last_target_position.dir
-/home/lu.gao/Desktop/learning-algo-week-3-binary-search/last-target-position/cmake-build-debug/CMakeFiles/edit_cache.dir
