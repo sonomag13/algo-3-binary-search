@@ -34,6 +34,45 @@ Example 2:
 class Solution {
 public:
     /**
+     * @param nums: a mountain sequence which increase firstly and then decrease
+     * @return: then mountain top
+     */
+    int mountainSequence(vector<int> &nums) {
+        // write your code here
+        
+        if (nums.empty()) {
+            return -1;  
+        }
+        
+        int left = 0, right = nums.size() - 1; 
+        
+        while (left + 1 < right) {
+            int mid = left + (right - left) / 2; 
+            
+            /**
+             * check if the mid is on the left slope or right slope
+             * notice that it is impossible that nums[mid] == nums[mid + 1]
+             */ 
+            if (nums[mid] < nums[mid + 1]) {
+                // on the left hill
+                left = mid; 
+            }
+            else {
+                // on the right hill
+                right = mid; 
+            }
+        }
+        
+        return nums[left] > nums[right] ? nums[left] : nums[right]; 
+        
+    }
+};
+
+
+// the soluton below is trickier
+class Solution2 {
+public:
+    /**
      * @param A: An integers array.
      * @return: return any of peek positions.
      */

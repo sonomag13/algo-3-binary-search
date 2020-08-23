@@ -2,14 +2,6 @@
 // Created by lu.gao on 3/15/2020.
 //
 
-#ifndef SEARCH_IN_A_BIG_SORTED_ARRAY_SOLUTION_H
-#define SEARCH_IN_A_BIG_SORTED_ARRAY_SOLUTION_H
-
-#include <cmath>
-#include <iostream>
-
-using namespace std;
-
 class Solution {
 public:
     /**
@@ -17,49 +9,44 @@ public:
      * @param target: An integer
      * @return: An integer which is the first index of target.
      */
-    int searchBigSortedArray(int* sortedArray, int target) {
+    int searchBigSortedArray(ArrayReader * reader, int target) {
         // write your code here
-        int i = 0, left = 0, leftVal, right, rightVal, mid, midVal;
-        if(*(sortedArray) == target) {
-            return left;
+        
+        if (target < reader->get(0)) {
+            return -1; 
         }
-        while(*(sortedArray + int(pow(2, i))) < target) {
-            i++;
+        
+        int l{0}, r{1}, m; 
+        
+        // find the upper boundary
+        while (reader->get(r) < target) {
+            r *= 2; 
         }
-        right = pow(2, i);
-        /*
-        cout << "power = " << i << endl;
-        cout << "initial right = " << right << endl;
-        */
-        while(left <= right - 1) {
-            mid = left + (right - left) / 2;
-            midVal = *(sortedArray + mid);
-            leftVal = *(sortedArray + left);
-            rightVal = *(sortedArray + right);
-            if(midVal == target) {
-                while(*(sortedArray + mid - 1) == target) {
-                    mid--;
-                }
-                return mid;
+        
+        // binary search
+        while (l + 1 < r) {
+            
+            m = l + (r - l) / 2; 
+            
+            // looking for the first appearance, so that if *m == target, move r to m
+            if (reader->get(m) >= target) {
+                r = m; 
             }
-            if(left == right - 1) {
-                if(leftVal == target) {
-                    return left;
-                }
-                if(rightVal == target) {
-                    return right;
-                }
-                return -1;
-            }
-            if(midVal < target) {
-                left = mid;
-            }
-            if(midVal > target) {
-                right = mid;
+            else {
+                l = m; 
             }
         }
+        
+        // since we are looking for the first appearance of the target, first check left
+        if (reader->get(l) == target) {
+            return l; 
+        }
+        
+        if (reader->get(r) == target) {
+            return r; 
+        }
+        
+        
+        return -1; 
     }
 };
-
-
-#endif //SEARCH_IN_A_BIG_SORTED_ARRAY_SOLUTION_H
