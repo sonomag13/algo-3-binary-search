@@ -1,9 +1,30 @@
-//
-// Created by lu.gao on 3/15/2020.
-//
+/*
+    460. Find K Closest Elements
 
-#ifndef FIND_CLOSEST_K_ELEMENTS_SOLUTION_H
-#define FIND_CLOSEST_K_ELEMENTS_SOLUTION_H
+    Given target, a non-negative integer k and an integer array A sorted in ascending order, 
+    find the k closest numbers to target in A, sorted in ascending order by the difference 
+    between the number and target. Otherwise, sorted in ascending order by number if the difference is same.
+
+    Example
+    Example 1:
+
+    Input: A = [1, 2, 3], target = 2, k = 3
+    Output: [2, 1, 3]
+    Example 2:
+
+    Input: A = [1, 4, 6, 8], target = 3, k = 3
+    Output: [4, 1, 6]
+    Challenge
+    O(logn + k) time
+
+    Notice
+    1. The value k is a non-negative integer and will always be smaller than the length of the sorted array.
+    2. Length of the given array is positive and will not exceed 10^4​​ 
+    3. Absolute value of elements in the array will not exceed 10^4
+
+ */
+
+#pragma once 
 
 #include <vector>
 #include <cmath>
@@ -12,91 +33,117 @@
 using namespace std;
 
 class Solution {
-
 public:
+    /**
+     * @param A: an integer array
+     * @param target: An integer
+     * @param k: An integer
+     * @return: an integer array
+     */
     vector<int> kClosestNumbers(vector<int> &A, int target, int k) {
-        // write your code here
-        vector<int> vecClosestNums;
-        int N = A.size() - 1;
-        int delta, rightDelta, leftDelta, minDelta = 1E5, minIdx = 1E5;
-        int left = 0, right = N, mid, midVal;
-        if(target < A[0]) {
-            for(int i = 0; i < k - 1; i++) {
-                vecClosestNums.push_back(A[i]);
+
+        vector<int> result; 
+        
+        /**
+         * we need to find the first element in the vector that is greater or equal 
+         * to the target. The index of this element is used by the right pointer, and
+         * the left pointer is just one element prior, i.e. left and right pointers are
+         * neighbor to each other. 
+         * 
+         * Thare are two corner cases:
+         * 1. target is larger than all the element in the vector: the right pointer
+         *    points to A.size() and accordingly the left pointer points to A.size()-1 
+         *    (or the last element in the vector), we only need to append last k elements 
+         *    in the vector but in the reversed order. In this case, the left pointer moves
+         *    by k but right pointer stays still.
+         * 
+         * 2. target is smaller than all the element in the vector: the right pointer
+         *    points to 0, and the left pointer points to -1. On the contrary to Case 1, 
+         *    the right point moves by k while the left pointer stays still. 
+         **/ 
+        int right{_findFirstIdx(A, target)}; 
+        int left = right - 1; 
+        
+        while(k > 0) {
+            
+            // count down by 1
+            k--; 
+
+            // corner case 1
+            if (right >= A.size()) {
+                result.push_back(A[left--]); 
+                continue; 
             }
-            return vecClosestNums;
+            
+            // corner case 2
+            if (left < 0) {
+                result.push_back(A[right++]);
+                continue; 
+            }
+            
+            /**
+             * Compare which pointer points to a value that is closer to the target. 
+             * If the delta are the same, first append the left pointer
+             **/ 
+            if ((target - A[left]) <= (A[right] - target)) {
+                result.push_back(A[left--]);
+            }
+            else {
+                result.push_back(A[right++]); 
+            }
+            
         }
-        if(target > A[N]) {
-            for(int i = N - k + 1; i < N; i++) {
-                vecClosestNums.push_back(A[i]);
-            }
-            return vecClosestNums;
-        }
-
-        while(left <= right - 1) {
-            mid = left + (right - left) / 2;
-            midVal = A[mid];
-            delta = abs(midVal - target);
-            // mid value is the target
-            if(delta == 0) {
-                minIdx = mid;
-                break;
-            }
-            if(left == right - 1) {
-                if(abs(A[left] - target) <= abs(A[right] - target)) {
-                    mid = left;
-                }
-                else {
-                    mid = right;
-                }
-                break;
-            }
-            if(delta < minDelta) {
-                minIdx = mid;
-                minDelta = delta;
-                if(target > midVal) {
-                    left = mid;
-                }
-                else {
-                    right = mid;
-                }
-            }
-
-        }
-        // push the first element into the vector
-        vecClosestNums.push_back(A[minIdx]);
-        // cout << "breakpoint 5" << endl;
-        left = mid - 1;
-        right = mid + 1;
-        k--;
-
-        while(k != 0) {
-            rightDelta = abs(A[right] - target);
-            leftDelta = abs(A[left] - target);
-            if(rightDelta == leftDelta) {
-                vecClosestNums.push_back(A[left]);
-                vecClosestNums.push_back(A[right]);
-                k -= 2;
-                left--;
-                right++;
-            }
-            if(rightDelta > leftDelta) {
-                vecClosestNums.push_back(A[left]);
-                k--;
-                left--;
-            }
-            if(rightDelta < leftDelta) {
-                vecClosestNums.push_back(A[right]);
-                k--;
-                right++;
-            }
-        }
-
-        return vecClosestNums;
-
+        
+        return result; 
     }
+    
+private:
 
+    /**
+     * this function locates the index of the first element in a sorted 
+     * vector that is greater or larger than the target
+     **/
+    int _findFirstIdx(const vector<int>& A, const int target) {                
+        
+        int l{0}, r{A.size()-1}; 
+        
+        /**
+         * corner case 1: 
+         * all the element in the vector is smaller than the target         
+         **/ 
+        if (target > A[r]) {
+            return A.size(); 
+        }
+        
+        /**
+         * corner case 2: 
+         * all the element in the vector is greater than the target         
+         **/ 
+        if (target < A[l]) {
+            return 0; 
+        }
+        
+        // start binary search
+        while(l + 1 < r) {
+            int m = l + (r - l) / 2; 
+            // mid point is equal to the target
+            if (A[m] == target) {
+                return m; 
+            }
+            // reset the l and r
+            if (A[m] < target) {
+                l = m; 
+            }
+            else {
+                r = m; 
+            }
+        }
+        
+        /**
+         * once the binary search has been completed, r pointer should points
+         * to the first value that is larger than the target
+         **/ 
+        return r; 
+    }
+    
 };
-
-
-#endif //FIND_CLOSEST_K_ELEMENTS_SOLUTION_H
