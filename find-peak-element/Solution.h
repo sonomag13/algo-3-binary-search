@@ -63,7 +63,7 @@ public:
             }
         }
         
-        return nums[left] > nums[right] ? nums[left] : nums[right]; 
+        return nums[left] > nums[right] ? left : right; 
         
     }
 };
