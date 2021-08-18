@@ -29,14 +29,14 @@ public:
      * @param target: an integer to be searched
      * @return: an integer
      */
-    int search(vector<int> &A, int target) {
+    int search(vector<int>& nums, int target) {
         // write your code here
 
-        if(A.empty()) {
+        if(nums.empty()) {
             return -1;
         }
 
-        int left = 0, right = A.size() - 1, mid;
+        size_t l{0}, r{nums.size() - 1};
         /*
          why left + 1 < right instead of left < right?
          - if there are two values only in the array, there might be infinite loop
@@ -46,45 +46,56 @@ public:
          - using while(left + 1 < right), the loop will break and left = 2 and right = 3
          - using while(left < right), the loop goes for one more time, which may yields left = right, and it will require more work to handle
          */
-        while(left + 1 < right) {
-            mid = left + (right - left) / 2;
-            if(A[mid] == target) {
-                return mid;
+                while (l + 1 < r) {
+            
+            size_t m{l + (r - l) / 2}; 
+            
+            if (nums[m] == target) {
+                return m; 
             }
-            if(A[mid] > A[left]) {
-                if(isInRange(A[left], A[mid], target)) {
-                    right = mid - 1;
+            
+            if (nums[m] > nums[l]) {
+                
+                // Case 1 m is on the left side of the array
+                
+                if (nums[l] <= target && target < nums[m]) {
+                    // Case 1.1 target is between [l, m]
+                    r = m; 
                 }
                 else {
-                    left = mid + 1;
-                }
+                    // Case 1.2 target is between [m, l];
+                    l = m;
+                }                
+                
             }
             else {
-                if(isInRange(A[mid], A[right], target)) {
-                    left = mid + 1;
+                
+                // Case 2 m is on the right side of the array 
+                
+                if (nums[m] < target && target <= nums[r]) {
+                    // Case 2.1 target is between [m, r]
+                    l = m;                                        
                 }
                 else {
-                    right = mid - 1;
-                }
+                    // Case 2.2 target is between [l, m]
+                    r = m;
+                }                
             }
+                        
         }
-
-        if(A[left] == target) {
-            return left;
+        
+        if (nums[l] == target) {
+            return l; 
         }
-
-        if (A[right] == target) {
-            return right;
+        
+        if (nums[r] == target) {
+            return r;
         }
-
+        
         return -1;
-
+        
     }
 
-private:
-    bool isInRange(int val1, int val2, int target) {
-        return target >= val1 && target <= val2 ? true : false;
-    }
 };
 
 #endif //SEARCH_IN_CIRCULAR_SHIFTED_ARRAY_SOLUTION_H
